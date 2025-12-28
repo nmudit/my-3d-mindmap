@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>3D Knowledge Mindmap</title>
+  <script src="//cdn.jsdelivr.net/npm/3d-force-graph"></script>
+  <style> 
+    body { margin: 0; background: #0b0e14; color: white; font-family: sans-serif; overflow: hidden; }
+    #info { position: absolute; top: 10px; left: 10px; z-index: 10; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <div id="info"><h1>Knowledge Analogy Graph</h1><p>Left-click: Rotate | Right-click: Pan | Scroll: Zoom</p></div>
+  <div id="3d-graph"></div>
+
+  <script>
+    const typeColors = {
+      'ANALOGY': '#a020f0',    // Purple
+      'CAUSES': '#00ff00',     // Green
+      'INHIBITS': '#ff0000',   // Red
+      'HISTORICAL': '#4cc9f0', // Cyan
+      'SCIENTIFIC': '#f72585', // Pink
+      'default': '#ffffff'
+    };
+
+    // REPLACE THIS WITH YOUR PRODUCTION WEBHOOK URL FROM n8n
+    const N8N_WEBHOOK_URL = 'https://nmudit.app.n8n.cloud/webhook/get-graph';
+
+    const Graph = ForceGraph3D()(document.getElementById('3d-graph'))
+      .jsonUrl(N8N_WEBHOOK_URL)
+      .nodeLabel('name')
+      .nodeAutoColorBy('group')
+      .linkWidth(1.5)
+      .linkColor(link => typeColors[link.type] || typeColors.default)
+      .linkDirectionalParticles(2)
+      .linkDirectionalParticleSpeed(0.005)
+      .linkDirectionalArrowLength(3.5)
+      .linkDirectionalArrowRelPos(1);
+  </script>
+</body>
+</html>
